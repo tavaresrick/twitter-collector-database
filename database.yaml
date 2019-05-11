@@ -1,0 +1,20 @@
+version: "3.0"
+services:
+
+  database:
+    build: ./
+    image: tavaresrick/postgres:1.0
+    ports:
+      - "5432:5432"
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+          constraints:
+              - node.role == worker
+              - service == 'backend'
+      restart_policy: 
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 40s
